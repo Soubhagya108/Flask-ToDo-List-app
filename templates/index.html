@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <h2 class="mb-4 text-center">My ToDo App ✅</h2>
+
+    <!-- Add Task -->
+    <form method="POST" action="/" class="mb-4 d-flex gap-2">
+      <input type="text" name="task" class="form-control" placeholder="New task" required>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+    <!-- Task List -->
+    <ul class="list-group">
+      {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center {% if task.done %}text-decoration-line-through text-muted{% endif %}">
+        <div class="d-flex align-items-center gap-2">
+          <!-- Checkbox -->
+          <form method="POST" action="/toggle">
+            <input type="hidden" name="task_index" value="{{ loop.revindex0 }}">
+            <button type="submit" class="btn btn-sm btn-outline-success">
+              {% if task.done %}✔{% else %}⬜{% endif %}
+            </button>
+          </form>
+
+          <!-- Task name -->
+          {{ task.task }}
+        </div>
+
+        <div class="d-flex gap-2">
+          <!-- Edit Form -->
+          <form method="POST" action="/edit" class="d-flex">
+            <input type="hidden" name="task_index" value="{{ loop.revindex0 }}">
+            <input type="text" name="new_task" placeholder="Edit..." class="form-control form-control-sm me-1" required>
+            <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+          </form>
+
+          <!-- Delete Button -->
+          <form method="POST" action="/delete">
+            <input type="hidden" name="task_index" value="{{ loop.revindex0 }}">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>
